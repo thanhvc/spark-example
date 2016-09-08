@@ -20,7 +20,7 @@ import org.apache.spark.api.java.function.Function;
 public class SimpleApp {
   public static void main(String[] args) {
     // Should be some file on your system
-    String logFile = "/usr/local/spark-1.6.1-bin-hadoop2.6/bin/README.md"; 
+    String logFile = "file:///usr/local/spark-1.6.1-bin-hadoop2.6/README.md"; 
     SparkConf conf = new SparkConf().setAppName("Simple Application");
     JavaSparkContext sc = new JavaSparkContext(conf);
     JavaRDD<String> logData = sc.textFile(logFile).cache();

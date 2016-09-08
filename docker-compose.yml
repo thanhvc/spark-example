@@ -11,6 +11,6 @@ spark:
   image: antlypls/spark
   command: bash
   volumes:
-    - ./target:/app
+    - ./target/scala-2.10:/app
   links:
    - kafka
