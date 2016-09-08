@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="test">
+    <select id="getTest" resultClass="database.Test">
+        select test_id as testID,test_name as testName,extract(test_xml, '//names').getClobVal() as testXml from
+        qinyuan_test where test_id=#value#
+    </select>
+    <select id="getAll" resultClass="database.Test">
+        select test_id as testID,test_name as testName,extract(test_xml, '//names').getClobVal() as testXml from
+        qinyuan_test
+    </select>
+    <insert id="saveTest" parameterClass="database.Test">
+        insert into qinyuan_test(test_id,test_name,test_xml) values(#testId#,#testName#,#testXml#)
+    </insert>
+    <update id="updateTest" parameterClass="database.Test">
+        update qinyuan_test set test_id=#testId#,test_name=#testName#,test_xml=#testXml# where test_id=#testId#
+    </update>
+    <delete id="deleteTest" parameterClass="database.Test">
+        delete from qinyuan_test where test_id=#testId#
+    </delete>
+</sqlMap>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.branchitech.com/schema/helloWorld"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.branchitech.com/schema/helloWorld">
+
+    <xsd:element name="hello" type="helloType"/>
+    <xsd:complexType name="helloType">
+        <xsd:attribute name="id" type="xsd:ID"/>
+        <xsd:attribute name="serial" type="xsd:string"/>
+        <xsd:attribute name="name" type="xsd:string"/>
+    </xsd:complexType>
+</xsd:schema>

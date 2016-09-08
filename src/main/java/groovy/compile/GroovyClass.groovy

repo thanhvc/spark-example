@@ -1,0 +1,17 @@
+package groovy.compile;
+
+class GroovyClass {
+
+	int count;
+	def test1(info) {
+		println "count:" + count + ", info:" + info
+	}
+	
+	def test2() {
+		return count++;
+	}
+	
+	static def test3() {
+		return 500;
+	}
+}

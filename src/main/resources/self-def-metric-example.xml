@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:metrics="http://www.branchitech.com/schema/metrics"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.branchitech.com/schema/metrics http://www.branchitech.com/schema/metrics/metrics-3.0.xsd
+    ">
+
+    <!-- 指标库配置 -->
+    <metrics:registry id="metricRegistry"/>
+    <metrics:annotation-driven proxy-target-class="true" registry="metricRegistry"/>
+
+    <!-- 控制台报告配置 -->
+    <metrics:console-reporter registry="metricRegistry" id="consoleReporter"/>
+
+    <!-- ganglia报告配置 -->
+    <metrics:gmetrics id="gmetrics">
+        <metrics:gmetric/>
+    </metrics:gmetrics>
+    <metrics:ganglia-reporter id="gangliaReporter"
+                              registry="metricRegistry" app-id="myTest" gmetric="gmetrics"/>
+
+    <!-- 定时报告执行器配置 -->
+    <metrics:executor-service name="metricsReporterExcutor"
+                              id="metricsReporterExcutor" size="2"/>
+
+    <!-- 定时报告配置 -->
+    <metrics:scheduled-reporter id="scheduledConsoleReporter"
+                                reporter="consoleReporter" executor="metricsReporterExcutor" period="5"
+                                auto-start="true"/>
+    <metrics:scheduled-reporter id="scheduleGangliaReporter"
+                                reporter="gangliaReporter" executor="metricsReporterExcutor" period="5"
+                                auto-start="true"/>
+
+    <!-- 自定义指标配置 -->
+    <bean id="selfDefMetricBean" class="branchitech.metrics.SelfDefMetricExample"/>
+
+    <!-- 该自定义指标将以selfDefMetric1这一名称汇报，指标值取决于selfDefMetricBean的getStringValue方法，
+     指标在发送给gmond时会被转换为string类型 -->
+    <metrics:self-def-metric id="selfDefMetric1" registry="metricRegistry" metric-bean="selfDefMetricBean"
+                             value-method="getStringValue"/>
+
+    <!-- 该指标将以selfDefMetric2这一名称汇报，指标值取决于selfDefMetricBean的getIntegerValue方法，
+     指标在发送给gmond时会被转换为int32类型 -->
+    <metrics:self-def-metric id="selfDefMetric2" registry="metricRegistry" metric-bean="selfDefMetricBean"
+                             value-method="getIntegerValue"/>
+
+    <!-- 该指标将以selfDefMetric3这一名称汇报，指标值取决于selfDefMetricBean的getFloatValue方法，
+     指标在发送给gmond时会被转换为float类型 -->
+    <metrics:self-def-metric id="selfDefMetric3" registry="metricRegistry" metric-bean="selfDefMetricBean"
+                             value-method="getFloatValue"/>
+
+    <!-- 该指标将以selfDefMetric4这一名称汇报，指标值取决于selfDefMetricBean的getStringBuilderValue方法，
+     指标在发送给gmond时会被转换为string类型 -->
+    <metrics:self-def-metric id="selfDefMetric4" registry="metricRegistry" metric-bean="selfDefMetricBean"
+                             value-method="getStringBuilderValue"/>
+
+    <!-- 这里没有定义id属性，程序会自动创建一个指标名称，该指标名称为branchitech.SelfDefMetricExample.getObjectValue，
+     指标值取决于selfDefMetricBean的getObjectValue方法，指标在发送给gmond时会被转换为string类型 -->
+    <metrics:self-def-metric registry="metricRegistry" metric-bean="selfDefMetricBean" value-method="getObjectValue"/>
+
+</beans>
